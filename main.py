@@ -2,6 +2,7 @@ import yfinance as yf
 import pandas as pd
 from itertools import combinations
 import json
+import numpy as np
 import os
 import torch
 
@@ -16,3 +17,18 @@ index = ['2020-12-30','2021-12-30','2022-12-30','2023-12-29']
 # df = pd.read_pickle('./data/MEGA_PICKLE/MEGA.pkl')
 
 # Conclusion: No relationships
+df = pd.read_pickle('./data/MEGA_PICKLE/MEGA.pkl')
+print(df.shape)
+df_dropped = df.drop(columns=['next_1y_pct_change'])
+column_pairs = [(col1, col2) for col1 in df_dropped.columns for col2 in df_dropped.columns if col1 != col2]
+list1 = []
+list1.append(df)
+for col1, col2 in column_pairs:
+    new_df = pd.DataFrame({f'{col1}_{col2}_ratio':df_dropped[col1] / df_dropped[col2]})
+    if new_df.isna().values.any() or np.isinf(new_df).any().any():
+        pass
+    else:
+        list1.append(new_df)
+merged = pd.concat(list1,axis=1)
+merged.to_pickle('./data/MEGA_PICKLE/MEGAMEGA.pkl')
+print(merged.shape)
