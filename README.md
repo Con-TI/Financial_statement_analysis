@@ -1,2 +1,3 @@
 Financial statements of some indonesian stocks.
-Passing through neural network and correlation tests resulted in no conclusions.
+Put them through a neural network.
+Data used includes ratios of various financial statement values and ratios of those ratios.
